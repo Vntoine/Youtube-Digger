@@ -9,18 +9,38 @@ def dig(code : str):
     if res != "<title> - YouTube</title>":
         return "Trouvé : "+res+" -----> "+code
 
+def exrexRandom() -> str :
+    return ''.join(exrex.getone('[A-Za-z0-9_\-]') for loop in range(11))
+
+def manualRandom() -> str :
+    symbols = [chr(i) for i in range(97,123)]
+    symbols += [chr(i) for i in range(65,91)]
+    symbols += [str(i) for i in range(10)]
+    symbols.append('-')
+    symbols.append('_')
+    return ''.join(symbols[random.randint(0,len(symbols)-1)] for i in range(11))
+
+
+
 time_start = time.time()
-
-symbols = [chr(i) for i in range(97,123)]
-symbols += [chr(i) for i in range(65,91)]
-symbols += [str(i) for i in range(10)]
-symbols.append('-')
-symbols.append('_')
-
-
-# Mettre en commentaire pour tester les solutions
 for i in range(1000):
-    code = ''.join(exrex.getone('[A-Za-z0-9_\-]') for loop in range(11))
-    #code = ''.join(symbols[random.randint(0,len(symbols)-1)] for i in range(11))
-
+    code = exrexRandom()
+    #code = manualRandom()
 print('OVER :',str(time.time()-time_start)[:4],"secondes")
+
+
+
+
+
+#           Récapitulatif des optimisations
+#
+#   exrex :
+#           - sur 10 000 tentatives -> 10.7 secondes (exrex) contre 0.9 secondes (manual)
+#           - sur 1 000 tentatives -> 1.09 secondes (exrex) contre 0.09 secondes (manual)
+#
+#
+#
+#
+#
+#
+#
