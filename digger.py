@@ -6,9 +6,8 @@ import time
 
 # Pour un code donné, la fonction teste le titre de la page pour déterminer si elle renvoie vers une vidéo
 def dig(code : str):
-    res = str(BeautifulSoup(requests.get('https://www.youtube.com/watch?v='+code,timeout=3).content,'html.parser').find('title'))
-    if res != "<title> - YouTube</title>":
-        return "Trouvé : "+res+" -----> "+code
+    res = str(BeautifulSoup(requests.get('https://www.youtube.com/watch?v='+code,timeout=3).content,'html.parser').title.text)
+    return "Trouvé : "+res+" -----> "+code if res != " - YouTube" else None
 
 symbols = [chr(i) for i in range(97,123)]       #   symbols correspond à un tableau semblable à une regex pour générer un code valide,
 symbols += [chr(i) for i in range(65,91)]       #        j'utilisais anciennement le module exrex pour générer un caractère
@@ -16,7 +15,7 @@ symbols += [str(i) for i in range(10)]          #       aléatoire à partir de 
 symbols.append('-')                             #           elle est moins performante qu'avec la solution ici présente :
 symbols.append('_')                             #     sur 10 000 essais, exrex -> 10.6 secondes contre 0.73 secondes maintenant
 
-tentatives = 1000
+tentatives = 100
 thread_start = time.time()
 with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
     futures = []
