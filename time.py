@@ -27,20 +27,3 @@ for i in range(1000):
     code = exrexRandom()
     #code = manualRandom()
 print('OVER :',str(time.time()-time_start)[:4],"secondes")
-
-
-
-
-
-#           Récapitulatif des optimisations
-#
-#   exrex :
-#           - sur 10 000 tentatives -> 10.7 secondes (exrex) contre 0.9 secondes (manual)
-#           - sur 1 000 tentatives -> 1.09 secondes (exrex) contre 0.09 secondes (manual)
-#
-#
-#
-#
-#
-#
-#
