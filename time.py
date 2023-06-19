@@ -11,8 +11,8 @@ def dig_old(code : str):
         return "Trouvé : "+res+" -----> "+code
 
 def dig_new(code : str):
-    res = str(BeautifulSoup(requests.get('https://www.youtube.com/watch?v='+code,timeout=3).content,'html.parser').title.text)
-    return "Trouvé : "+res+" -----> "+code if res != " - YouTube" else None
+    res = requests.get('https://img.youtube.com/vi/'+code+'/1.jpg',timeout=3).status_code
+    return "Trouvé : "+res+" -----> "+code if res == 200 else None
 
 def exrexRandom() -> str :
     return ''.join(exrex.getone('[A-Za-z0-9_\-]') for loop in range(11))
@@ -33,7 +33,7 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
     futures = []
     for i in range(tentatives):
         code = manualRandom()
-        futures.append(executor.submit(dig_old,code))
+        futures.append(executor.submit(dig_new,code))
     for future in concurrent.futures.as_completed(futures):
         if future.result() is not None:
             print(future.result())
