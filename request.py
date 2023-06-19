@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 import time
 
 start_time = time.time()

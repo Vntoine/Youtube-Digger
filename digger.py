@@ -1,13 +1,12 @@
 import requests
-from bs4 import BeautifulSoup
 import random
 import concurrent.futures
 import time
 
 # Pour un code donné, la fonction teste le titre de la page pour déterminer si elle renvoie vers une vidéo
 def dig(code : str):
-    res = str(BeautifulSoup(requests.get('https://www.youtube.com/watch?v='+code,timeout=3).content,'html.parser').title.text)
-    return "Trouvé : "+res+" -----> "+code if res != " - YouTube" else None
+    res = requests.get('https://img.youtube.com/vi/'+code+'/1.jpg',timeout=3).status_code
+    return "Trouvé : "+code if res == 200 else None
 
 symbols = [chr(i) for i in range(97,123)]       #   symbols correspond à un tableau semblable à une regex pour générer un code valide,
 symbols += [chr(i) for i in range(65,91)]       #        j'utilisais anciennement le module exrex pour générer un caractère
