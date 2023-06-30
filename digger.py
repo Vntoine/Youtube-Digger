@@ -3,7 +3,7 @@ import random
 import concurrent.futures
 import time
 
-# Pour un code donné, la fonction teste le titre de la page pour déterminer si elle renvoie vers une vidéo
+# Pour un code donné, la fonction effectue une requête vers les images associées à la vidéo (thumbnails).
 def dig(code : str):
     res = requests.get('https://img.youtube.com/vi/'+code+'/1.jpg',timeout=3).status_code
     return "Trouvé : "+code if res == 200 else None
@@ -14,9 +14,9 @@ symbols += [str(i) for i in range(10)]          #       aléatoire à partir de 
 symbols.append('-')                             #           elle est moins performante qu'avec la solution ici présente :
 symbols.append('_')                             #     sur 10 000 essais, exrex -> 10.6 secondes contre 0.73 secondes maintenant
 
-tentatives = 100
+tentatives = 1000
 thread_start = time.time()
-with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
+with concurrent.futures.ThreadPoolExecutor() as executor:
     futures = []
     for i in range(tentatives):
         code = ''.join(symbols[random.randint(0,len(symbols)-1)] for i in range(11))
@@ -24,7 +24,8 @@ with concurrent.futures.ThreadPoolExecutor(max_workers=7) as executor:
     for future in concurrent.futures.as_completed(futures):
         if future.result() is not None:
             print(future.result())
-print('\nOVER ⛏️  :',str(time.time() - thread_start)[:4],"secondes")
+
+print('\nOVER ⛏️  :',str(time.time() - thread_start)[:5],"secondes\n")
 
 
 
@@ -40,4 +41,11 @@ print('\nOVER ⛏️  :',str(time.time() - thread_start)[:4],"secondes")
 #                                                       6.45 secondes avec 5 max_workers
 #                                                       4.65 secondes avec 10 max_workers
 #           - sur 1 000 : 45.9 secondes (5 max_workers) et 42.47 secondes (10 max_workers)
-#             d'où le 7 dans le script actuel, bon compromis entre efficacité et coût (processeur, éviter de trop le solliciter)
+#               PS: Mettre une valeur de max_workers est préférable. Dans mon cas, c'est-à-dire avec mon processeur actuel,
+#               le ThreadPoolExecutor alloue 20 threads, pour des résultats quasi-égaux qu'avec 10 threads.
+#
+#   Lien de la requête :
+#           - sur 10 requêtes -> 4.26 secondes (https://www.youtube.com/watch?v=............)
+#           - sur 10 requêtes -> 1.15 secondes (https://img.youtube.com/vi/.........../1.jpg)
+#
+#
